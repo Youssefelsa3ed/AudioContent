@@ -66,14 +66,14 @@ class HomeViewModelTest {
                 10,
                 3600,
                 "en",
-                5,
-                9,
-                100.0
+                "5",
+                "9",
+                "100.0"
             )
         )
         val mockSections = listOf(
-            Section("Podcasts", "square", "podcast", 1, mockContent),
-            Section("Episodes", "2_lines_grid", "episode", 2, emptyList())
+            Section("Podcasts", "square", "podcast", "1", mockContent),
+            Section("Episodes", "2_lines_grid", "episode", "2", emptyList())
         )
         val mockPagination = Pagination("/home_sections?page=2", 10)
         val mockResponse = HomeSectionsResponse(mockSections, mockPagination)
@@ -109,19 +109,19 @@ class HomeViewModelTest {
     @Test
     fun `loadMoreSections appends new sections to existing ones`() = runTest {
         val firstPageContent = listOf(
-            PodcastContent("1", "Test Podcast 1", "Description", "image.jpg", 10, 3600, "en", 5, 9, 100.0)
+            PodcastContent("1", "Test Podcast 1", "Description", "image.jpg", 10, 3600, "en", "5", "9", "100.0")
         )
         val firstPageSections = listOf(
-            Section("Podcasts", "square", "podcast", 1, firstPageContent)
+            Section("Podcasts", "square", "podcast", "1", firstPageContent)
         )
         val firstPagePagination = Pagination("/home_sections?page=2", 10)
         val firstPageResponse = HomeSectionsResponse(firstPageSections, firstPagePagination)
 
         val secondPageContent = listOf(
-            PodcastContent("2", "Test Podcast 2", "Description", "image.jpg", 10, 3600, "en", 5, 9, 100.0)
+            PodcastContent("2", "Test Podcast 2", "Description", "image.jpg", 10, 3600, "en", "5", "9", "100.0")
         )
         val secondPageSections = listOf(
-            Section("More Podcasts", "square", "podcast", 2, secondPageContent)
+            Section("More Podcasts", "square", "podcast", "2", secondPageContent)
         )
         val secondPagePagination = Pagination(null, 10)
         val secondPageResponse = HomeSectionsResponse(secondPageSections, secondPagePagination)

@@ -29,10 +29,10 @@ class AudioContentRepository @Inject constructor(
         }
     }
 
-    fun searchSections(query: String): Flow<Resource<SearchResponse>> = flow {
+    fun searchSections(): Flow<Resource<SearchResponse>> = flow {
         try {
             emit(Resource.Loading())
-            val response = searchApiService.searchSections(query)
+            val response = searchApiService.searchSections()
             if (response.isSuccessful && response.body() != null) {
                 emit(Resource.Success(response.body()!!))
             } else {

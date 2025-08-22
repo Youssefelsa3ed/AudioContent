@@ -12,7 +12,7 @@
         android:theme="@style/Theme.AudioContent"
         android:name=".AudioContentApplication">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.screens.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.AudioContent">
             <intent-filter>

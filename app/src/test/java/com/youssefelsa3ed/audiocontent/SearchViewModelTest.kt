@@ -2,6 +2,7 @@ package com.youssefelsa3ed.audiocontent
 
 import com.youssefelsa3ed.audiocontent.data.model.PodcastContent
 import com.youssefelsa3ed.audiocontent.data.model.SearchResponse
+import com.youssefelsa3ed.audiocontent.data.model.Section
 import com.youssefelsa3ed.audiocontent.data.repository.AudioContentRepository
 import com.youssefelsa3ed.audiocontent.data.repository.Resource
 import com.youssefelsa3ed.audiocontent.viewmodel.SearchViewModel
@@ -61,10 +62,13 @@ class SearchViewModelTest {
     @Test
     fun `search with debounce delay works correctly`() = runTest {
         val mockItems = listOf(
-            PodcastContent("1", "Test", null, null, 10, null, null, null, null, 100.0)
+            PodcastContent("1", "Test", null, null, 10, null, null, null, null, "100.0")
         )
-        val mockResponse = SearchResponse(mockItems)
-        whenever(repository.searchSections("test")).thenReturn(
+        val searchResponse = listOf(
+            Section("Podcasts", "square", "podcast", "1", mockItems)
+        )
+        val mockResponse = SearchResponse(searchResponse)
+        whenever(repository.searchSections()).thenReturn(
             flowOf(Resource.Success(mockResponse))
         )
 

@@ -42,7 +42,7 @@ class SearchViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .filter { it.isNotBlank() }
                 .collect { query ->
-                    performSearch(query)
+                    performSearch()
                 }
         }
     }
@@ -60,9 +60,9 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun performSearch(query: String) {
+    private fun performSearch() {
         viewModelScope.launch {
-            repository.searchSections(query).collect { resource ->
+            repository.searchSections().collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
                         _uiState.value = _uiState.value.copy(
@@ -72,7 +72,7 @@ class SearchViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         _uiState.value = _uiState.value.copy(
-                            results = resource.data.results,
+                            results = resource.data.results.last().content,
                             isLoading = false,
                             errorMessage = null,
                             hasSearched = true

@@ -21,7 +21,7 @@ data class Section(
     @SerializedName("content_type")
     val contentType: String, // "podcast", "episode", "audio_book", "audio_article"
     @SerializedName("order")
-    val order: Int,
+    val order: String,
     @SerializedName("content")
     val content: List<ContentItem>
 )

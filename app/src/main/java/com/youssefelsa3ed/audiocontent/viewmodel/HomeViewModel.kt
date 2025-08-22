@@ -84,4 +84,8 @@ class HomeViewModel @Inject constructor(
             loadHomeSections(_uiState.value.currentPage + 1)
         }
     }
+
+    fun retry() {
+        loadHomeSections()
+    }
 }

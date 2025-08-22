@@ -39,10 +39,10 @@ class AudioContentRepositoryTest {
     @Test
     fun `getHomeSections returns success when API call is successful`() = runTest {
         val mockContent = listOf(
-            PodcastContent("1", "Test Podcast", "Description", "image.jpg", 10, 3600, "en", 5, 9, 100.0)
+            PodcastContent("1", "Test Podcast", "Description", "image.jpg", 10, 3600, "en", "5", "9", "100.0")
         )
         val mockSections = listOf(
-            Section("Podcasts", "square", "podcast", 1, mockContent)
+            Section("Podcasts", "square", "podcast", "1", mockContent)
         )
         val mockPagination = Pagination("/home_sections?page=2", 10)
         val mockResponse = HomeSectionsResponse(mockSections, mockPagination)
@@ -70,16 +70,19 @@ class AudioContentRepositoryTest {
     @Test
     fun `searchSections returns success when API call is successful`() = runTest {
         val mockItems = listOf(
-            PodcastContent("1", "Test Podcast", "Description", "image.jpg", 10, 3600, "en", 5, 9, 100.0)
+            PodcastContent("1", "Test Podcast", "Description", "image.jpg", 10, 3600, "en", "5", "9", "100.0")
         )
-        val mockResponse = SearchResponse(mockItems)
-        whenever(searchApiService.searchSections("test")).thenReturn(Response.success(mockResponse))
+        val searchResponse = listOf(
+            Section("Podcasts", "square", "podcast", "1", mockItems)
+        )
+        val mockResponse = SearchResponse(searchResponse)
+        whenever(searchApiService.searchSections()).thenReturn(Response.success(mockResponse))
 
-        val result = repository.searchSections("test").toList()
+        val result = repository.searchSections().toList()
 
         assertEquals(2, result.size)
         assertTrue(result[0] is Resource.Loading)
         assertTrue(result[1] is Resource.Success)
-        assertEquals(mockItems, (result[1] as Resource.Success).data.results)
+        assertEquals(mockItems, (result[1] as Resource.Success).data.results.last().content)
     }
 }

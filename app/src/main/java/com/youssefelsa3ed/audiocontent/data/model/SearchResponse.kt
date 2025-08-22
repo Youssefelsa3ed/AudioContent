@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class SearchResponse(
     @SerializedName("sections")
-    val results: List<ContentItem>
+    val results: List<Section>
 )

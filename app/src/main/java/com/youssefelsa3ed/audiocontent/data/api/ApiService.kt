@@ -13,5 +13,5 @@ interface HomeApiService {
 
 interface SearchApiService {
     @GET("search")
-    suspend fun searchSections(@Query("q") query: String): Response<SearchResponse>
+    suspend fun searchSections(): Response<SearchResponse>
 }
