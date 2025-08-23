@@ -2,33 +2,55 @@ package com.youssefelsa3ed.audiocontent.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import com.youssefelsa3ed.audiocontent.R
 
-// Set of Material typography styles to start with
+val ibmPlexSansArabic = FontFamily(
+    Font(R.font.ibmplexsansarabic_extralight, FontWeight.ExtraLight),
+    Font(R.font.ibmplexsansarabic_light, FontWeight.Light),
+    Font(R.font.ibmplexsansarabic_regular, FontWeight.Normal),
+    Font(R.font.ibmplexsansarabic_medium, FontWeight.Medium),
+    Font(R.font.ibmplexsansarabic_bold, FontWeight.Bold),
+    Font(R.font.ibmplexsansarabic_semibold, FontWeight.SemiBold),
+    Font(R.font.ibmplexsansarabic_thin, FontWeight.Thin)
+)
 val Typography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
+        fontFamily = ibmPlexSansArabic,
+        fontWeight = FontWeight.Normal
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = ibmPlexSansArabic,
+        fontWeight = FontWeight.SemiBold
+    ),
+    bodySmall = TextStyle(
+        fontFamily = ibmPlexSansArabic,
+        fontWeight = FontWeight.Light
+    ),
     titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        fontFamily = ibmPlexSansArabic,
+        fontWeight = FontWeight.Bold
+    ),
+    titleMedium = TextStyle(
+        fontFamily = ibmPlexSansArabic,
+        fontWeight = FontWeight.Medium
+    ),
+    titleSmall = TextStyle(
+        fontFamily = ibmPlexSansArabic,
+        fontWeight = FontWeight.Light
     ),
     labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
+        fontFamily = ibmPlexSansArabic,
+        fontWeight = FontWeight.ExtraLight
+    ),
+    labelMedium = TextStyle(
+        fontFamily = ibmPlexSansArabic,
+        fontWeight = FontWeight.Medium
+    ),
+    labelLarge = TextStyle(
+        fontFamily = ibmPlexSansArabic,
+        fontWeight = FontWeight.SemiBold
     )
-    */
 )

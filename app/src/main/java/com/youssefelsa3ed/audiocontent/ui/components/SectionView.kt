@@ -21,7 +21,7 @@ fun SectionView(
     Column(modifier = modifier) {
         Text(
             text = section.name,
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
 
