@@ -17,9 +17,9 @@ data class Section(
     @SerializedName("name")
     val name: String,
     @SerializedName("type")
-    val type: String, // "square", "2_lines_grid", "big_square", "queue
+    val type: String,
     @SerializedName("content_type")
-    val contentType: String, // "podcast", "episode", "audio_book", "audio_article"
+    val contentType: String,
     @SerializedName("order")
     val order: String,
     @SerializedName("content")
@@ -42,11 +42,19 @@ class ContentItemDeserializer : JsonDeserializer<ContentItem> {
         val jsonObject = json.asJsonObject
 
         return when {
-            jsonObject.has("podcast_id") -> context.deserialize(json, PodcastContent::class.java)
             jsonObject.has("episode_id") -> context.deserialize(json, EpisodeContent::class.java)
+            jsonObject.has("podcast_id") -> context.deserialize(json, PodcastContent::class.java)
             jsonObject.has("audiobook_id") -> context.deserialize(json, AudioBookContent::class.java)
             jsonObject.has("article_id") -> context.deserialize(json, AudioArticleContent::class.java)
             else -> throw IllegalArgumentException("Unknown content type")
         }
     }
+}
+
+enum class SectionType(val title: String) {
+    Square("square"),
+    HorizontalList("horizontal_list"),
+    TwoLineGrid("2_lines_grid"),
+    BigSquare("big_square"),
+    Queue("queue");
 }

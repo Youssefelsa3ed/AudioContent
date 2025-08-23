@@ -26,6 +26,7 @@ import com.youssefelsa3ed.audiocontent.data.model.AudioBookContent
 import com.youssefelsa3ed.audiocontent.data.model.ContentItem
 import com.youssefelsa3ed.audiocontent.data.model.EpisodeContent
 import com.youssefelsa3ed.audiocontent.data.model.PodcastContent
+import com.youssefelsa3ed.audiocontent.ui.utils.Utils
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -94,11 +95,7 @@ fun ContentItemCard(
             }
 
             item.duration?.let { duration ->
-                val displayDuration = when {
-                    duration > 3600 -> "${duration / 3600}h ${(duration % 3600) / 60}m"
-                    duration > 60 -> "${duration / 60}m"
-                    else -> "${duration}s"
-                }
+                val displayDuration = Utils.getDuration(duration)
                 Text(
                     text = displayDuration,
                     style = MaterialTheme.typography.labelSmall,
@@ -212,11 +209,7 @@ fun TwoLineGridItem(
                 }
 
                 item.duration?.let { duration ->
-                    val displayDuration = when {
-                        duration > 3600 -> "${duration / 3600}h ${(duration % 3600) / 60}m"
-                        duration > 60 -> "${duration / 60}m"
-                        else -> "${duration}s"
-                    }
+                    val displayDuration = Utils.getDuration(duration)
                     Text(
                         text = displayDuration,
                         style = MaterialTheme.typography.labelSmall,
@@ -230,10 +223,10 @@ fun TwoLineGridItem(
 
 @Composable
 fun CardStackQueue(
-    initialCards: List<ContentItem>,
+    items: List<ContentItem>,
     modifier: Modifier = Modifier
 ) {
-    var cards by remember { mutableStateOf(initialCards) }
+    var cards by remember { mutableStateOf(items) }
     val maxVisible = 4
     Card(
         modifier = modifier.fillMaxWidth().height(120.dp).padding(horizontal = 16.dp),

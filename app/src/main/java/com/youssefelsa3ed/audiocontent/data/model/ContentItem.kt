@@ -8,6 +8,7 @@ sealed class ContentItem {
     abstract val avatarUrl: String?
     abstract val duration: Int?
     abstract val score: String?
+    open val order: String? = "0"
 }
 
 data class PodcastContent(
@@ -26,7 +27,7 @@ data class PodcastContent(
     @SerializedName("language")
     val language: String?,
     @SerializedName("priority")
-    val priority: String?,
+    override val order: String?,
     @SerializedName("popularityScore")
     val popularityScore: String?,
     @SerializedName("score")
@@ -65,7 +66,7 @@ data class EpisodeContent(
     @SerializedName("podcastPopularityScore")
     val podcastPopularityScore: Int?,
     @SerializedName("podcastPriority")
-    val podcastPriority: Int?
+    override val order: String?
 ) : ContentItem()
 
 data class AudioBookContent(

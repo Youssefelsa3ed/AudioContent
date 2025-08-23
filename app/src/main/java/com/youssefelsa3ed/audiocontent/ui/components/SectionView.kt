@@ -9,9 +9,12 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.youssefelsa3ed.audiocontent.data.model.Section
+import com.youssefelsa3ed.audiocontent.data.model.SectionType
+import com.youssefelsa3ed.audiocontent.ui.utils.Utils
 
 @Composable
 fun SectionView(
@@ -19,24 +22,42 @@ fun SectionView(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        Text(
-            text = section.name,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
+        Box(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = section.name,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+            if (section.type == SectionType.Queue.title) {
+                val totalDuration = section.content.sumOf { it.duration ?: 0 }
+                val displayDuration = Utils.getDuration(totalDuration)
+                Text(
+                    text = "${section.content.size} Episodes, $displayDuration",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+            }
+        }
 
-        when (section.type) {
-            "horizontal_list" -> {
+        val items = section.content.sortedBy { it.order }
+        when (section.type.replace(" ", "_")) {
+            SectionType.HorizontalList.title -> {
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(section.content) { item ->
+                    items(items) { item ->
                         HorizontalContentItem(item = item)
                     }
                 }
             }
-            "2_lines_grid" -> {
+            SectionType.TwoLineGrid.title -> {
                 LazyHorizontalGrid(
                     rows = GridCells.Fixed(2),
                     contentPadding = PaddingValues(horizontal = 16.dp),
@@ -44,18 +65,18 @@ fun SectionView(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.height((200).dp)
                 ) {
-                    items(section.content) { item ->
+                    items(items) { item ->
                         TwoLineGridItem(item = item)
                     }
                 }
             }
-            "square" -> {
+            SectionType.Square.title -> {
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.height(100.dp)
                 ) {
-                    items(section.content) { item ->
+                    items(items) { item ->
                         ContentItemCard(
                             item = item,
                             isSquare = true
@@ -63,13 +84,13 @@ fun SectionView(
                     }
                 }
             }
-            "big_square" -> {
+            SectionType.BigSquare.title -> {
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.height(200.dp)
                 ) {
-                    items(section.content) { item ->
+                    items(items) { item ->
                         ContentItemCard(
                             item = item,
                             isBigSquare = true
@@ -77,7 +98,7 @@ fun SectionView(
                     }
                 }
             }
-            "queue" -> CardStackQueue(initialCards = section.content)
+            SectionType.Queue.title -> CardStackQueue(items)
         }
     }
 }
