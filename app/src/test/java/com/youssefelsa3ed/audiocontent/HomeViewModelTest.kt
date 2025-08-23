@@ -1,5 +1,6 @@
 package com.youssefelsa3ed.audiocontent
 
+import androidx.media3.exoplayer.ExoPlayer
 import com.youssefelsa3ed.audiocontent.data.model.HomeSectionsResponse
 import com.youssefelsa3ed.audiocontent.data.model.Pagination
 import com.youssefelsa3ed.audiocontent.data.model.PodcastContent
@@ -29,6 +30,9 @@ class HomeViewModelTest {
     @Mock
     private lateinit var repository: AudioContentRepository
 
+    @Mock
+    private lateinit var exoPlayer: ExoPlayer
+
     private lateinit var viewModel: HomeViewModel
     private val testDispatcher = StandardTestDispatcher()
 
@@ -47,7 +51,7 @@ class HomeViewModelTest {
     fun `initial state is loading`() = runTest {
         whenever(repository.getHomeSections(1)).thenReturn(flowOf(Resource.Loading()))
 
-        viewModel = HomeViewModel(repository)
+        viewModel = HomeViewModel(repository, exoPlayer)
         advanceUntilIdle()
 
         assertTrue(viewModel.uiState.value.isLoading)
@@ -82,7 +86,7 @@ class HomeViewModelTest {
             flowOf(Resource.Loading(), Resource.Success(mockResponse))
         )
 
-        viewModel = HomeViewModel(repository)
+        viewModel = HomeViewModel(repository, exoPlayer)
         advanceUntilIdle()
 
         assertFalse(viewModel.uiState.value.isLoading)
@@ -98,7 +102,7 @@ class HomeViewModelTest {
             flowOf(Resource.Loading(), Resource.Error(errorMessage))
         )
 
-        viewModel = HomeViewModel(repository)
+        viewModel = HomeViewModel(repository, exoPlayer)
         advanceUntilIdle()
 
         assertFalse(viewModel.uiState.value.isLoading)
@@ -133,7 +137,7 @@ class HomeViewModelTest {
             flowOf(Resource.Loading(), Resource.Success(secondPageResponse))
         )
 
-        viewModel = HomeViewModel(repository)
+        viewModel = HomeViewModel(repository, exoPlayer)
         advanceUntilIdle()
 
         viewModel.loadMoreSections()

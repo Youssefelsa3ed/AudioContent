@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.youssefelsa3ed.audiocontent.ui.components.BottomAudioPlayer
 import com.youssefelsa3ed.audiocontent.ui.components.SectionView
 import com.youssefelsa3ed.audiocontent.viewmodel.HomeViewModel
 
@@ -50,6 +51,18 @@ fun HomeScreen(
                     }
                 }
             )
+        },
+        bottomBar = {
+            BottomAudioPlayer(
+                uiState = uiState,
+                onPlayPauseClicked = {
+                    if (uiState.isPlaying)
+                        viewModel.pauseAudio()
+                    else
+                        viewModel.resumeAudio()
+                },
+                closePlayer = { viewModel.closeAudio() }
+            )
         }
     ) { paddingValues ->
         Box(
@@ -85,7 +98,11 @@ fun HomeScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         items(uiState.sections) { section ->
-                            SectionView(section = section)
+                            SectionView(section = section) { audioUri, episode ->
+                                if (uiState.isPlaying && uiState.playingUri == audioUri)
+                                    return@SectionView
+                                viewModel.playAudio(episode, audioUri)
+                            }
                         }
 
                         if (uiState.isLoadingMore) {
