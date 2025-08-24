@@ -23,6 +23,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val exoPlayerState by viewModel.exoPlayerState.collectAsState()
     val listState = rememberLazyListState()
 
     // Load more content when reaching the end
@@ -54,9 +55,9 @@ fun HomeScreen(
         },
         bottomBar = {
             BottomAudioPlayer(
-                uiState = uiState,
+                exoPlayerState = exoPlayerState,
                 onPlayPauseClicked = {
-                    if (uiState.isPlaying)
+                    if (exoPlayerState.isPlaying)
                         viewModel.pauseAudio()
                     else
                         viewModel.resumeAudio()
@@ -99,7 +100,7 @@ fun HomeScreen(
                     ) {
                         items(uiState.sections) { section ->
                             SectionView(section = section) { audioUri, episode ->
-                                if (uiState.isPlaying && uiState.playingUri == audioUri)
+                                if (exoPlayerState.isPlaying && exoPlayerState.playingUri == audioUri)
                                     return@SectionView
                                 viewModel.playAudio(episode, audioUri)
                             }

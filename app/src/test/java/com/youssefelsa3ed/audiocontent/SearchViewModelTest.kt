@@ -1,5 +1,6 @@
 package com.youssefelsa3ed.audiocontent
 
+import androidx.media3.exoplayer.ExoPlayer
 import com.youssefelsa3ed.audiocontent.data.model.PodcastContent
 import com.youssefelsa3ed.audiocontent.data.model.SearchResponse
 import com.youssefelsa3ed.audiocontent.data.model.Section
@@ -28,6 +29,8 @@ class SearchViewModelTest {
 
     @Mock
     private lateinit var repository: AudioContentRepository
+    @Mock
+    private lateinit var exoPlayer: ExoPlayer
 
     private lateinit var viewModel: SearchViewModel
     private val testDispatcher = StandardTestDispatcher()
@@ -36,7 +39,7 @@ class SearchViewModelTest {
     fun setup() {
         MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(testDispatcher)
-        viewModel = SearchViewModel(repository)
+        viewModel = SearchViewModel(repository, exoPlayer)
     }
 
     @After
@@ -79,7 +82,6 @@ class SearchViewModelTest {
 
         assertFalse(viewModel.uiState.value.hasSearched)
 
-        advanceTimeBy(150)
         advanceUntilIdle()
 
         assertTrue(viewModel.uiState.value.hasSearched)

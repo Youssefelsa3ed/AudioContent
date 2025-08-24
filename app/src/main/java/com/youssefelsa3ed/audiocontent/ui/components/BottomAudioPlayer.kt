@@ -26,15 +26,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.youssefelsa3ed.audiocontent.R
-import com.youssefelsa3ed.audiocontent.viewmodel.HomeUiState
+import com.youssefelsa3ed.audiocontent.viewmodel.ExoPlayerState
 
 @Composable
 fun BottomAudioPlayer(
-    uiState: HomeUiState,
+    exoPlayerState: ExoPlayerState,
     onPlayPauseClicked: () -> Unit,
     closePlayer: () -> Unit
 ) {
-    if (uiState.playingUri != null) {
+    if (exoPlayerState.playingUri != null) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -48,35 +48,35 @@ fun BottomAudioPlayer(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 AsyncImage(
-                    uiState.playingContent?.avatarUrl ?: "",
-                    uiState.playingContent?.name ?: "",
+                    exoPlayerState.playingContent?.thumbnail ?: "",
+                    exoPlayerState.playingContent?.title ?: "",
                     modifier = Modifier.size(40.dp)
                 )
                 Text(
-                    text = uiState.playingContent?.name ?: "Now Playing",
+                    text = exoPlayerState.playingContent?.title ?: "Now Playing",
                     color = Color.White,
                     modifier = Modifier.weight(1f)
                 )
 
-                if (uiState.loadingAudioContent)
+                if (exoPlayerState.loadingAudioContent)
                     CircularProgressIndicator(
                         modifier = Modifier.size(16.dp)
                     )
                 else
                     IconButton(onClick = {
-                        if (uiState.playingPosition >= uiState.duration)
+                        if (exoPlayerState.playingPosition >= exoPlayerState.duration)
                             closePlayer.invoke()
                         else
                             onPlayPauseClicked.invoke()
                     }) {
-                        if (uiState.playingPosition >= uiState.duration) {
+                        if (exoPlayerState.playingPosition >= exoPlayerState.duration) {
                             Icon(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "Play",
                                 tint = Color.White
                             )
                         }
-                        else if (uiState.isPlaying)
+                        else if (exoPlayerState.isPlaying)
                             Image(
                                 painterResource(R.drawable.outline_pause_circle_24),
                                 contentDescription = "Pause",
@@ -93,8 +93,8 @@ fun BottomAudioPlayer(
 
             LinearProgressIndicator(
                 progress = {
-                    if (uiState.playingPosition > 0) {
-                        (uiState.playingPosition.toFloat() / uiState.duration.toFloat())
+                    if (exoPlayerState.playingPosition > 0) {
+                        (exoPlayerState.playingPosition.toFloat() / exoPlayerState.duration.toFloat())
                             .coerceIn(0f, 1f)
                     } else 0f
                 },

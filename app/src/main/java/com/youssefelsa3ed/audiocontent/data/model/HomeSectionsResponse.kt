@@ -53,7 +53,6 @@ class ContentItemDeserializer : JsonDeserializer<ContentItem> {
 
 enum class SectionType(val title: String) {
     Square("square"),
-    HorizontalList("horizontal_list"),
     TwoLineGrid("2_lines_grid"),
     BigSquare("big_square"),
     Queue("queue");

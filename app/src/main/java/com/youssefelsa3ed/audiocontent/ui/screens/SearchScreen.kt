@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.youssefelsa3ed.audiocontent.ui.components.BottomAudioPlayer
 import com.youssefelsa3ed.audiocontent.ui.components.ContentItemCard
 import com.youssefelsa3ed.audiocontent.ui.components.SearchBar
 import com.youssefelsa3ed.audiocontent.viewmodel.SearchViewModel
@@ -24,6 +25,7 @@ fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val exoPlayerState by viewModel.exoPlayerState.collectAsState()
     val gridState = rememberLazyGridState()
 
     LaunchedEffect(Unit) {
@@ -42,6 +44,18 @@ fun SearchScreen(
                         )
                     }
                 }
+            )
+        },
+        bottomBar = {
+            BottomAudioPlayer(
+                exoPlayerState = exoPlayerState,
+                onPlayPauseClicked = {
+                    if (exoPlayerState.isPlaying)
+                        viewModel.pauseAudio()
+                    else
+                        viewModel.resumeAudio()
+                },
+                closePlayer = { viewModel.closeAudio() }
             )
         }
     ) { paddingValues ->
@@ -99,8 +113,13 @@ fun SearchScreen(
                             items(uiState.results) { item ->
                                 ContentItemCard(
                                     item = item,
-                                    isSquare = false
-                                )
+                                    isSquare = true,
+                                    isBigSquare = false
+                                ) { audioUrl, episode ->
+                                    if (exoPlayerState.isPlaying && exoPlayerState.playingUri == audioUrl)
+                                        return@ContentItemCard
+                                    viewModel.playAudio(episode, audioUrl)
+                                }
                             }
                         }
                     }

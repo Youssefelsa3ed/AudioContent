@@ -3,23 +3,25 @@ package com.youssefelsa3ed.audiocontent.data.model
 import com.google.gson.annotations.SerializedName
 
 sealed class ContentItem {
-    abstract val name: String
+    abstract val title: String
     abstract val description: String?
-    abstract val avatarUrl: String?
+    abstract val thumbnail: String?
     abstract val duration: Int?
     abstract val score: String?
     open val order: String? = "0"
+    open val releaseDate: String? = null
+    open val contentPlayableUrl: String? = null
 }
 
 data class PodcastContent(
     @SerializedName("podcast_id")
     val podcastId: String,
     @SerializedName("name")
-    override val name: String,
+    override val title: String,
     @SerializedName("description")
     override val description: String?,
     @SerializedName("avatar_url")
-    override val avatarUrl: String?,
+    override val thumbnail: String?,
     @SerializedName("episode_count")
     val episodeCount: Int?,
     @SerializedName("duration")
@@ -38,11 +40,11 @@ data class EpisodeContent(
     @SerializedName("episode_id")
     val episodeId: String,
     @SerializedName("name")
-    override val name: String,
+    override val title: String,
     @SerializedName("description")
     override val description: String?,
     @SerializedName("avatar_url")
-    override val avatarUrl: String?,
+    override val thumbnail: String?,
     @SerializedName("duration")
     override val duration: Int?,
     @SerializedName("podcast_name")
@@ -56,9 +58,9 @@ data class EpisodeContent(
     @SerializedName("number")
     val number: Int?,
     @SerializedName("audio_url")
-    val audioUrl: String?,
+    override val contentPlayableUrl: String?,
     @SerializedName("release_date")
-    val releaseDate: String?,
+    override val releaseDate: String?,
     @SerializedName("podcast_id")
     val podcastId: String?,
     @SerializedName("score")
@@ -73,19 +75,19 @@ data class AudioBookContent(
     @SerializedName("audiobook_id")
     val audiobookId: String,
     @SerializedName("name")
-    override val name: String,
+    override val title: String,
     @SerializedName("author_name")
     val authorName: String?,
     @SerializedName("description")
     override val description: String?,
     @SerializedName("avatar_url")
-    override val avatarUrl: String?,
+    override val thumbnail: String?,
     @SerializedName("duration")
     override val duration: Int?,
     @SerializedName("language")
     val language: String?,
     @SerializedName("release_date")
-    val releaseDate: String?,
+    override val releaseDate: String?,
     @SerializedName("score")
     override val score: String?
 ) : ContentItem()
@@ -94,17 +96,17 @@ data class AudioArticleContent(
     @SerializedName("article_id")
     val articleId: String,
     @SerializedName("name")
-    override val name: String,
+    override val title: String,
     @SerializedName("author_name")
     val authorName: String?,
     @SerializedName("description")
     override val description: String?,
     @SerializedName("avatar_url")
-    override val avatarUrl: String?,
+    override val thumbnail: String?,
     @SerializedName("duration")
     override val duration: Int?,
     @SerializedName("release_date")
-    val releaseDate: String?,
+    override val releaseDate: String?,
     @SerializedName("score")
     override val score: String?
 ) : ContentItem()

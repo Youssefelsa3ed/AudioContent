@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import com.youssefelsa3ed.audiocontent.data.model.Pagination
-import com.youssefelsa3ed.audiocontent.data.model.Section
 import com.youssefelsa3ed.audiocontent.data.repository.AudioContentRepository
 import com.youssefelsa3ed.audiocontent.data.repository.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,22 +18,6 @@ import javax.inject.Inject
 import androidx.core.net.toUri
 import com.youssefelsa3ed.audiocontent.data.model.ContentItem
 
-data class HomeUiState(
-    val sections: List<Section> = emptyList(),
-    val isLoading: Boolean = false,
-    val isLoadingMore: Boolean = false,
-    val errorMessage: String? = null,
-    val pagination: Pagination? = null,
-    val currentPage: Int = 1,
-    val canLoadMore: Boolean = false,
-    val playingUri: String? = null,
-    val playingContent: ContentItem? = null,
-    val playingPosition: Long = 0,
-    val duration: Long = 0,
-    val isPlaying: Boolean = false,
-    val loadingAudioContent: Boolean = false
-)
-
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: AudioContentRepository,
@@ -44,6 +26,8 @@ class HomeViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    private val _exoPlayerState = MutableStateFlow(ExoPlayerState())
+    val exoPlayerState: StateFlow<ExoPlayerState> = _exoPlayerState.asStateFlow()
 
     private var progressJob: Job? = null
 
@@ -53,7 +37,7 @@ class HomeViewModel @Inject constructor(
         exoPlayer.prepare()
         exoPlayer.play()
 
-        _uiState.value = _uiState.value.copy(
+        _exoPlayerState.value = _exoPlayerState.value.copy(
             playingUri = url,
             playingContent = content,
             playingPosition = 0,
@@ -62,12 +46,12 @@ class HomeViewModel @Inject constructor(
         )
         exoPlayer.addListener(object : Player.Listener {
             override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-                _uiState.value = _uiState.value.copy(duration = exoPlayer.duration, loadingAudioContent = false)
+                _exoPlayerState.value = _exoPlayerState.value.copy(duration = exoPlayer.duration, loadingAudioContent = false)
             }
 
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == Player.STATE_READY) {
-                    _uiState.value = _uiState.value.copy(duration = exoPlayer.duration, loadingAudioContent = false)
+                    _exoPlayerState.value = _exoPlayerState.value.copy(duration = exoPlayer.duration, loadingAudioContent = false)
                 }
             }
         })
@@ -79,7 +63,7 @@ class HomeViewModel @Inject constructor(
         progressJob?.cancel()
         progressJob = viewModelScope.launch {
             while (true) {
-                _uiState.value = _uiState.value.copy(
+                _exoPlayerState.value = _exoPlayerState.value.copy(
                     playingPosition = exoPlayer.currentPosition
                 )
                 delay(250L)
@@ -89,17 +73,17 @@ class HomeViewModel @Inject constructor(
 
     fun pauseAudio() {
         exoPlayer.pause()
-        _uiState.value = _uiState.value.copy(isPlaying = false)
+        _exoPlayerState.value = _exoPlayerState.value.copy(isPlaying = false)
     }
 
     fun closeAudio() {
         exoPlayer.stop()
-        _uiState.value = _uiState.value.copy(isPlaying = false, playingContent = null, playingUri = null)
+        _exoPlayerState.value = _exoPlayerState.value.copy(isPlaying = false, playingContent = null, playingUri = null)
     }
 
     fun resumeAudio() {
         exoPlayer.play()
-        _uiState.value = _uiState.value.copy(isPlaying = true)
+        _exoPlayerState.value = _exoPlayerState.value.copy(isPlaying = true)
     }
 
     override fun onCleared() {
